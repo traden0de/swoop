@@ -36,6 +36,8 @@
   let dragging = $state(false);
   let creature: Creature | undefined = $state();
   let thumbs = $state<Record<number, string>>({});
+  // Окно спрятано в трей или свёрнуто — существо не рисует и не тратит процессор
+  let mainVisible = $state(true);
 
   const ip = $derived(
     (settings?.preferredIp && addresses.find((a) => a.ip === settings!.preferredIp)?.ip) || addresses[0]?.ip || '127.0.0.1',
@@ -58,6 +60,7 @@
   );
   $effect(() => creature?.setBase(base));
   $effect(() => creature?.setProgress(progress));
+  $effect(() => creature?.setActive(mainVisible));
   $effect(() => setSoundsEnabled(settings?.sounds ?? false));
 
   const statusText = $derived(
@@ -168,6 +171,8 @@
     })();
 
     unsubs.push(onServerEvent(onEvent));
+    unsubs.push(listen<boolean>('swoop-visible', (e) => (mainVisible = e.payload)));
+    void core.mainVisible().then((v) => (mainVisible = v)).catch(() => {});
     unsubs.push(listen<Settings>('swoop-settings', (e) => {
         settings = e.payload;
         applyUiSettings(e.payload);

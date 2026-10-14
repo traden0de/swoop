@@ -45,6 +45,10 @@ export class Tweens<T extends Record<string, number>> {
   anim(key: keyof T, keys: Key[], now: number, onDone?: () => void) {
     this.map.set(key, { keys, i: 0, from: this.target[key], t0: now, onDone });
   }
+  /** Идёт ли хоть один твин — тогда нужна полная частота кадров. */
+  get active() {
+    return this.map.size > 0;
+  }
   locked(key: keyof T) {
     return this.map.has(key);
   }

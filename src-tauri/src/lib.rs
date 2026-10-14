@@ -144,12 +144,23 @@ pub fn run() {
             Ok(())
         })
         .on_window_event(|window, event| {
-            // Крестик главного окна прячет его в трей — сервер продолжает работать
-            if let WindowEvent::CloseRequested { api, .. } = event {
-                if window.label() == "main" {
+            if window.label() != "main" {
+                return;
+            }
+            match event {
+                // Крестик главного окна прячет его в трей — сервер продолжает работать
+                WindowEvent::CloseRequested { api, .. } => {
                     api.prevent_close();
                     let _ = window.hide();
+                    windows::main_visibility(window.app_handle(), false);
                 }
+                // Свернули или развернули — анимацию ставим на паузу или продолжаем
+                WindowEvent::Resized(_) => {
+                    let visible = !window.is_minimized().unwrap_or(false) && window.is_visible().unwrap_or(true);
+                    windows::main_visibility(window.app_handle(), visible);
+                }
+                WindowEvent::Focused(true) => windows::main_visibility(window.app_handle(), true),
+                _ => {}
             }
         })
         .invoke_handler(tauri::generate_handler![

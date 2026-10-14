@@ -89,6 +89,9 @@ export class Creature {
   private last = this.now;
   private raf = 0;
   private running = false;
+  /** Окно скрыто в трей или свёрнуто — не рисуем вовсе (сообщает приложение через setActive). */
+  private suspended = false;
+  private lastDraw = 0;
   private W = 0;
   private H = 0;
   private DPR = 1;
@@ -114,7 +117,7 @@ export class Creature {
     const onDown = (e: PointerEvent) => {
       if (this.opts.interactive && this.hit(e.clientX, e.clientY)) this.poke();
     };
-    const onVis = () => (document.hidden ? this.stop() : this.start());
+    const onVis = () => (document.hidden || this.suspended ? this.stop() : this.start());
     const mqDark = matchMedia('(prefers-color-scheme: dark)');
     const onDark = () => (this.dark = isDarkTheme());
     // Тему могли выбрать вручную — следим и за атрибутом data-theme
@@ -190,6 +193,15 @@ export class Creature {
     this.tipCap();
     this.emit('star', 3);
     this.blink();
+  }
+  /**
+   * Окно скрыто (трей, свёрнуто) или снова на экране. Скрытое существо не тратит процессор:
+   * WebView2 не всегда сообщает странице, что окно спрятано, поэтому приложение говорит явно.
+   */
+  setActive(active: boolean) {
+    this.suspended = !active;
+    if (active && !document.hidden) this.start();
+    else this.stop();
   }
   /** Любая активность извне будит существо. */
   wake() {
@@ -303,14 +315,37 @@ export class Creature {
 
   // ---------- цикл кадров ----------
 
+  /**
+   * Частота кадров по делу: 60 — когда что-то происходит (твины, частицы, карточки, передача,
+   * курсор рядом), 30 — в покое, 15 — во сне. Сглаживание не зависит от FPS, поэтому движения
+   * выглядят так же, а процессор не греется впустую.
+   */
+  private fps() {
+    if (this.state === 'sleeping') return 15;
+    const busy =
+      this.tw.active ||
+      this.particles.length > 0 ||
+      this.cards.length > 0 ||
+      this.now - this.pointer.at < 1.5 ||
+      Math.abs(this.mouth.vel) > 0.05 ||
+      ['receiving', 'sending', 'dragOver', 'dizzy', 'done', 'error'].includes(this.state);
+    return busy ? 60 : 30;
+  }
+
   private start() {
     if (this.running) return;
     this.running = true;
     this.last = performance.now() / 1000;
     const frame = (ts: number) => {
       if (!this.running) return;
-      this.now = ts / 1000;
-      const dt = clamp(this.now - this.last, 1e-3, 0.05);
+      const t = ts / 1000;
+      if (t - this.lastDraw < 1 / this.fps() - 0.004) {
+        this.raf = requestAnimationFrame(frame);
+        return;
+      }
+      this.lastDraw = t;
+      this.now = t;
+      const dt = clamp(this.now - this.last, 1e-3, 0.08);
       this.last = this.now;
       this.update(dt);
       this.draw();
@@ -498,12 +533,16 @@ export class Creature {
     const base = g.createLinearGradient(rx * 0.7, -ry * 0.85, -rx * 0.8, ry * 0.9);
     base.addColorStop(0, '#FFF5E8');
     base.addColorStop(1, '#E8C8A6');
-    g.shadowColor = rgba(this.col, this.cfg.glow * (this.dark ? 0.7 : 0.45));
-    g.shadowBlur = R * 0.7;
+    // Свечение — радиальный градиент под телом, а не shadowBlur: размытие с большим радиусом
+    // в каждом кадре держало процессор и видеокарту занятыми даже в покое.
+    const glowR = Math.max(rx, ry) * 1.6;
+    const glow = g.createRadialGradient(0, 0, Math.min(rx, ry) * 0.55, 0, 0, glowR);
+    glow.addColorStop(0, rgba(this.col, this.cfg.glow * (this.dark ? 0.55 : 0.32)));
+    glow.addColorStop(1, rgba(this.col, 0));
+    g.fillStyle = glow;
+    g.fillRect(-glowR, -glowR, glowR * 2, glowR * 2);
     g.fillStyle = base;
     g.fill(body);
-    g.shadowBlur = 0;
-    g.shadowColor = 'transparent';
 
     // Слой 2: оттенок состояния снизу вверх
     if (m.tint > 0.01) {
