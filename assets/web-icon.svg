@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Иконка веб-приложения: квадрат без прозрачности (iOS сам скругляет углы),
+       всё важное — внутри безопасного круга 80% (maskable для Android). -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c95ff"/>
+      <stop offset="1" stop-color="#3f4fcf"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.55" r="0.5">
+      <stop offset="0" stop-color="#ffe2bf" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#ffe2bf" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="body" x1="0.8" y1="0.1" x2="0.15" y2="0.95">
+      <stop offset="0" stop-color="#FFF5E8"/>
+      <stop offset="1" stop-color="#E8C8A6"/>
+    </linearGradient>
+    <radialGradient id="rim" cx="0.5" cy="0.5" r="0.62">
+      <stop offset="0.6" stop-color="#3c1e0a" stop-opacity="0"/>
+      <stop offset="1" stop-color="#3c1e0a" stop-opacity=".2"/>
+    </radialGradient>
+    <radialGradient id="hl" cx="0.66" cy="0.28" r="0.3">
+      <stop offset="0" stop-color="#fff" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a5cc0"/>
+      <stop offset="1" stop-color="#2c3a8c"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <circle cx="512" cy="580" r="420" fill="url(#glow)"/>
+  <ellipse cx="512" cy="850" rx="270" ry="36" fill="#1b2370" opacity=".35"/>
+  <g transform="translate(512 600) scale(0.93) translate(-512 -580)">
+    <path id="b" d="M512 330c210 0 330 40 330 250s-120 250-330 250-330-40-330-250 120-250 330-250z" fill="url(#body)"/>
+    <path d="M512 330c210 0 330 40 330 250s-120 250-330 250-330-40-330-250 120-250 330-250z" fill="url(#rim)"/>
+    <path d="M512 330c210 0 330 40 330 250s-120 250-330 250-330-40-330-250 120-250 330-250z" fill="url(#hl)"/>
+    <ellipse cx="335" cy="645" rx="60" ry="33" fill="#ff7882" opacity=".4"/>
+    <ellipse cx="689" cy="645" rx="60" ry="33" fill="#ff7882" opacity=".4"/>
+    <rect x="378" y="528" width="78" height="108" rx="39" fill="#2a1d17"/>
+    <rect x="568" y="528" width="78" height="108" rx="39" fill="#2a1d17"/>
+    <circle cx="430" cy="558" r="15" fill="#fff" opacity=".9"/>
+    <circle cx="620" cy="558" r="15" fill="#fff" opacity=".9"/>
+    <g transform="rotate(-7 512 330)">
+      <path d="M332 350c0-190 360-190 360 0z" fill="url(#cap)"/>
+      <rect x="332" y="320" width="360" height="46" rx="18" fill="#1e2766"/>
+      <ellipse cx="560" cy="366" rx="160" ry="34" fill="#1e2766"/>
+      <rect x="466" y="215" width="92" height="62" rx="10" fill="#ffd56b"/>
+      <path d="M476 228l36 26 36-26" fill="none" stroke="#c99a2e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <ellipse cx="610" cy="245" rx="40" ry="18" fill="#fff" opacity=".18" transform="rotate(-20 610 245)"/>
+    </g>
+  </g>
+</svg>

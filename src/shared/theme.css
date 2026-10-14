@@ -1,0 +1,163 @@
+/* Токены Swoop. Тёмная тема — как в референсе mochi-creature (#111318, мягкое свечение),
+   светлая — тёплая пастель, чтобы кремовое существо смотрелось «дома». */
+:root {
+  color-scheme: light dark;
+  --bg: #fbf6ef;
+  --bg-glow: #fff1df;
+  --surface: #ffffff;
+  --surface-2: #f6efe5;
+  --border: #ecdfcf;
+  --border-strong: #dccbb6;
+  --text: #2a1d17;
+  --text-2: #7a685b;
+  --text-3: #a8978a;
+  --accent: #4c6fff;
+  --accent-ink: #ffffff;
+  --accent-soft: #e6ebff;
+  --ok: #1fae7c;
+  --ok-soft: #dcf5eb;
+  --warn: #e8890c;
+  --warn-soft: #fff0d9;
+  --err: #e2475a;
+  --err-soft: #fde4e7;
+  --shadow: 0 1px 2px rgba(80, 50, 20, .06), 0 6px 24px rgba(80, 50, 20, .07);
+  --radius: 18px;
+  --radius-sm: 12px;
+  --font: system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+/* Тёмная тема: по системе (если пользователь не выбрал светлую) или выбранная явно.
+   data-theme ставит src/shared/theme.svelte.ts. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111318;
+    --bg-glow: #1c1f27;
+    --surface: #1a1d24;
+    --surface-2: #20242d;
+    --border: #2a2e38;
+    --border-strong: #3a3f4c;
+    --text: #e6e8ee;
+    --text-2: #9aa1b0;
+    --text-3: #6b7282;
+    --accent: #6f8cff;
+    --accent-ink: #0d1020;
+    --accent-soft: #232b4a;
+    --ok: #34d399;
+    --ok-soft: #133328;
+    --warn: #f5a524;
+    --warn-soft: #362712;
+    --err: #f4505e;
+    --err-soft: #3a1a1f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 30px rgba(0, 0, 0, .25);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #111318;
+  --bg-glow: #1c1f27;
+  --surface: #1a1d24;
+  --surface-2: #20242d;
+  --border: #2a2e38;
+  --border-strong: #3a3f4c;
+  --text: #e6e8ee;
+  --text-2: #9aa1b0;
+  --text-3: #6b7282;
+  --accent: #6f8cff;
+  --accent-ink: #0d1020;
+  --accent-soft: #232b4a;
+  --ok: #34d399;
+  --ok-soft: #133328;
+  --warn: #f5a524;
+  --warn-soft: #362712;
+  --err: #f4505e;
+  --err-soft: #3a1a1f;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 30px rgba(0, 0, 0, .25);
+}
+:root[data-theme="light"] { color-scheme: light; }
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.45 var(--font);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  background: radial-gradient(ellipse at 50% 20%, var(--bg-glow), var(--bg) 70%) fixed, var(--bg);
+}
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+canvas { display: block; touch-action: manipulation; }
+
+/* Кнопки-пилюли, как в референсе */
+.pill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+  border-radius: 999px; padding: 9px 16px; font-weight: 550;
+  transition: border-color .15s, background .15s, transform .1s;
+}
+.pill:hover { border-color: var(--border-strong); }
+.pill:active { transform: scale(.97); }
+.pill.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.pill.primary:hover { filter: brightness(1.06); }
+.pill.ghost { background: transparent; }
+.pill.danger { color: var(--err); }
+.pill:disabled { opacity: .5; pointer-events: none; }
+.pill.sm { padding: 5px 11px; font-size: 13px; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.muted { color: var(--text-2); }
+.faint { color: var(--text-3); }
+.mono { font-family: var(--mono); }
+
+.empty {
+  text-align: center; color: var(--text-3); padding: 28px 12px; font-size: 14px;
+}
+.scroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+
+/* Полоса прогресса */
+.bar { height: 6px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.bar > i { display: block; height: 100%; border-radius: inherit; background: var(--accent); transition: width .2s; }
+.bar.ok > i { background: var(--ok); }
+.bar.err > i { background: var(--err); }
+
+input[type=text], textarea {
+  width: 100%; border: 1px solid var(--border); background: var(--surface);
+  border-radius: var(--radius-sm); padding: 10px 12px; outline: none;
+}
+input[type=text]:focus, textarea:focus { border-color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* Пустое состояние: значок в мягкой плашке и короткий текст */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px;
+  padding: 44px 24px; color: var(--text-2);
+}
+.empty-state .art {
+  width: 64px; height: 64px; border-radius: 20px; display: grid; place-items: center;
+  background: var(--surface); border: 1px solid var(--border); color: var(--text-3);
+  box-shadow: var(--shadow);
+}
+.empty-state p { margin: 0; max-width: 320px; font-size: 14px; line-height: 1.5; }
+.pill .icon { margin: 0 -2px; }
+
+/* Переключатель в стиле iOS: <input type="checkbox" class="switch"> */
+.switch {
+  appearance: none; width: 42px; height: 24px; border-radius: 12px; background: var(--border-strong);
+  position: relative; cursor: pointer; transition: background .2s; flex: none; margin: 0;
+}
+.switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%;
+  background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); transition: transform .2s cubic-bezier(.3, 1.4, .5, 1);
+}
+.switch:checked { background: var(--accent); }
+.switch:checked::after { transform: translateX(18px); }

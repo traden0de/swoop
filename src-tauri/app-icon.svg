@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6f8cff"/>
+      <stop offset="1" stop-color="#4255d6"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0.8" y1="0.1" x2="0.15" y2="0.95">
+      <stop offset="0" stop-color="#FFF5E8"/>
+      <stop offset="1" stop-color="#E8C8A6"/>
+    </linearGradient>
+    <radialGradient id="hl" cx="0.66" cy="0.3" r="0.3">
+      <stop offset="0" stop-color="#fff" stop-opacity=".65"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2c3a8c"/>
+      <stop offset="1" stop-color="#1e2766"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="230" fill="url(#bg)"/>
+  <ellipse cx="512" cy="842" rx="290" ry="40" fill="#1b2370" opacity=".35"/>
+  <path d="M512 330c210 0 330 40 330 250s-120 250-330 250-330-40-330-250 120-250 330-250z" fill="url(#body)"/>
+  <path d="M512 330c210 0 330 40 330 250s-120 250-330 250-330-40-330-250 120-250 330-250z" fill="url(#hl)"/>
+  <ellipse cx="335" cy="640" rx="58" ry="32" fill="#ff7882" opacity=".35"/>
+  <ellipse cx="689" cy="640" rx="58" ry="32" fill="#ff7882" opacity=".35"/>
+  <rect x="380" y="530" width="74" height="104" rx="37" fill="#2a1d17"/>
+  <rect x="570" y="530" width="74" height="104" rx="37" fill="#2a1d17"/>
+  <circle cx="430" cy="560" r="14" fill="#fff" opacity=".85"/>
+  <circle cx="620" cy="560" r="14" fill="#fff" opacity=".85"/>
+  <g transform="rotate(-7 512 330)">
+    <path d="M332 350c0-190 360-190 360 0z" fill="url(#cap)"/>
+    <rect x="332" y="320" width="360" height="46" rx="18" fill="#161d52"/>
+    <ellipse cx="560" cy="366" rx="160" ry="34" fill="#161d52"/>
+    <rect x="466" y="215" width="92" height="62" rx="10" fill="#ffd56b"/>
+    <path d="M476 228l36 26 36-26" fill="none" stroke="#c99a2e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
